@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Encrypt Image | Secure System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <style>
+    body {
+      background: url("assets/images/bg-beauty.jpg") no-repeat center/cover;
+      font-family: 'Inter', sans-serif;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start pt-10 px-4 bg-rose-100 bg-opacity-70 backdrop-blur">
+
+  <div class="bg-white bg-opacity-90 p-8 rounded-xl shadow-2xl max-w-xl w-full fade-in">
+    <h2 class="text-2xl text-center text-rose-600 font-semibold mb-4">Encrypt Image</h2>
+
+    <form id="encryptForm" class="space-y-4">
+      <input type="file" id="imageInput" accept="image/*" class="w-full border rounded-md p-2 bg-white" required>
+      <input type="text" id="encryptionKey" placeholder="Enter secret key" class="w-full border rounded-md p-2 focus:ring-2 focus:ring-rose-400" required>
+      <button type="submit" class="w-full bg-rose-500 text-white py-2 rounded-md hover:bg-rose-600 transition">Encrypt</button>
+    </form>
+
+    <!-- 🔁 Updated Preview Section with Buttons -->
+    <div id="previewSection" class="mt-6 hidden">
+      <p class="text-sm text-gray-600 mb-2">Image Preview:</p>
+      <img id="previewImage" src="" alt="Preview" class="w-full rounded-md shadow mb-4">
+      <p class="text-sm text-gray-600 mb-2">Encrypted Output:</p>
+      <textarea id="encryptedResult" class="w-full h-40 p-2 border rounded-md text-sm"></textarea>
+
+      <div class="flex justify-between mt-4">
+        <button type="button" onclick="saveHistory()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">💾 Save History</button>
+        <button type="button" onclick="goToHistory()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">🔎 View History</button>
+        <button type="button" onclick="goToDecrypt()" class="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600">➡ Decrypt Now</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById("imageInput");
+    const previewImage = document.getElementById("previewImage");
+    const encryptedResult = document.getElementById("encryptedResult");
+    const previewSection = document.getElementById("previewSection");
+
+    document.getElementById("encryptForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const file = imageInput.files[0];
+      const key = document.getElementById("encryptionKey").value;
+
+      if (!file || !key) {
+        alert("Please select an image and enter a secret key.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          const maxWidth = 300;
+          const scale = maxWidth / img.width;
+          canvas.width = maxWidth;
+          canvas.height = img.height * scale;
+
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.5);
+
+          previewImage.src = compressedBase64;
+          previewSection.classList.remove("hidden");
+
+          const encrypted = CryptoJS.AES.encrypt(compressedBase64, key).toString();
+          encryptedResult.value = encrypted;
+        };
+        img.src = event.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+    // 🔐 Save Encryption History to LocalStorage
+    function saveHistory() {
+      const encrypted = document.getElementById("encryptedResult").value;
+      const key = document.getElementById("encryptionKey").value;
+      const time = new Date().toLocaleString();
+
+      const record = { encrypted, key, time };
+      const history = JSON.parse(localStorage.getItem("encryptHistory") || "[]");
+      history.unshift(record);
+      localStorage.setItem("encryptHistory", JSON.stringify(history));
+      alert("History saved.");
+    }
+
+    // 📁 Go to History Page
+    function goToHistory() {
+      window.location.href = "encrypt-history.html";
+    }
+
+    // ➡ Go to Decrypt Page (auto-fill session)
+    function goToDecrypt() {
+      const encrypted = document.getElementById("encryptedResult").value;
+      const key = document.getElementById("encryptionKey").value;
+
+      sessionStorage.setItem("encryptedToDecrypt", encrypted);
+      sessionStorage.setItem("decryptionKey", key);
+
+      window.location.href = "decrypt.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Main Page | Secure System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- ✅ Navigation Bar -->
+  <nav class="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-rose-600">Secure System</h1>
+    <div class="flex items-center gap-4">
+      <p id="usernameDisplay" class="text-gray-700 font-medium"></p>
+      <button onclick="logout()" class="bg-rose-500 text-white px-3 py-1 rounded hover:bg-rose-600">Logout</button>
+    </div>
+  </nav>
+
+  <!-- ✅ Message while redirecting -->
+  <div class="flex justify-center items-center h-[80vh]">
+    <p class="text-lg text-gray-600">Redirecting based on your role...</p>
+  </div>
+
+  <script>
+    // ✅ Get stored login info
+    const role = localStorage.getItem("role");
+    const username = localStorage.getItem("username");
+
+    // ✅ Show username on navbar
+    if (username) {
+      document.getElementById("usernameDisplay").textContent = username;
+    }
+
+    // ✅ Redirect logic
+    if (!role || !username) {
+      alert("Access denied. Please login first.");
+      window.location.href = "login.html";
+    } else {
+      setTimeout(() => {
+        if (role === "admin") {
+          window.location.href = "admin-dashboard.html";
+        } else if (role === "staff") {
+          window.location.href = "staff-dashboard.html";
+        } else {
+          alert("Unknown role. Please contact the administrator.");
+          window.location.href = "login.html";
+        }
+      }, 1500); // 1.5 second delay for UX
+    }
+
+    // ✅ Logout clears session
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Staff Members | Secure System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+  <!-- Staff Members Card -->
+  <div class="w-full max-w-6xl bg-white shadow-md rounded-lg p-6">
+    
+    <!-- Card Header -->
+    <div class="text-center mb-6">
+      <h2 class="text-2xl font-semibold text-rose-600">Staff Members</h2>
+      <p class="text-sm text-gray-600 mt-1">List of all registered staff in the system</p>
+    </div>
+
+    <!-- Staff Members Table -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white text-sm text-center rounded-lg overflow-hidden">
+        <thead class="bg-rose-200 text-gray-800">
+          <tr>
+            <th class="py-2 px-4">ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="staffTableBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    // ✅ Load all staff records
+    function loadStaffRecords() {
+      fetch("php/user-fetch.php")
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.getElementById("staffTableBody");
+          tbody.innerHTML = "";
+
+          data.forEach(user => {
+            if(user.role === "staff"){
+              const tr = document.createElement("tr");
+              tr.classList.add("border-b");
+              tr.innerHTML = `
+                <td class="p-2">${user.id}</td>
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${user.phone}</td>
+                <td>
+                  <span class="px-2 py-1 text-xs font-medium rounded 
+                    ${user.status === 'approved' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}">
+                    ${user.status}
+                  </span>
+                </td>
+              `;
+              tbody.appendChild(tr);
+            }
+          });
+        })
+        .catch(err => console.error("Failed to load staff records:", err));
+    }
+
+    window.addEventListener("DOMContentLoaded", loadStaffRecords);
+  </script>
+
+</body>
+</html>

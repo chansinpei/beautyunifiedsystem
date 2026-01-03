@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customer Consultation Form</title>
+
+  <!-- THEME -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: url("assets/images/bg-beauty.jpg") no-repeat center / cover;
+    }
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+    }
+    .rose-icon {
+      color: #E11D48; /* rose pink flower color */
+    }
+  </style>
+</head>
+
+
+<body class="min-h-screen bg-rose-100/70 backdrop-blur-sm flex justify-center p-6">
+
+  <div class="w-full max-w-6xl bg-white/90 rounded-xl shadow-lg p-8 backdrop-blur-md">
+
+    <h1 class="brand-title text-3xl text-rose-600 font-bold mb-3">Customer Consultation Form</h1>
+
+    <p class="text-gray-700 mb-6">Select a treatment package and answer all required fields *</p>
+
+   <form id="consultationForm" action="php/consultation-submit.php" method="POST" class="space-y-6">
+
+
+ <?php
+session_start();
+$staff_id = $_SESSION['user_id'] ?? '';
+?>
+
+
+
+      <!-- PACKAGES -->
+      <div class="p-4 border rounded-lg bg-white">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <i class="ri-gift-line rose-icon"></i>
+          Choose Treatment Package *
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <!-- PACKAGES FROM README -->
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Non-invasive Eyebrow Cleaning" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1741679127_dde4602c830a6ac903d3750b167f3832.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg" class="h-36 w-full object-cover rounded-md mb-2" class="h-36 w-full object-cover rounded-md mb-2"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Non-invasive Eyebrow Cleaning</h3>
+        <p class="text-sm text-gray-600">Eyebrow cleaning without invasive procedures</p>
+        <p class="font-bold text-rose-600">RM 299 • 60 min</p>
+      </label>
+
+
+
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Intense Pulsed Light (IPL) Therapy" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1741679651_29c27283832c1575fb2a2cdaf91ba623.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg" class="h-36 w-full object-cover rounded-md mb-2" class="h-36 w-full object-cover rounded-md mb-2"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Intense Pulsed Light (IPL) Therapy</h3>
+        <p class="text-sm text-gray-600">Advanced IPL for skin rejuvenation</p>
+        <p class="font-bold text-rose-600">RM 599 • 75 min</p>
+      </label>
+
+
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="HIFU Facelift Therapy" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1741679970_39987aa40eb3f6fb9f991677e0abbee6.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg" class="h-36 w-full object-cover rounded-md mb-2"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">HIFU Facelift Therapy</h3>
+        <p class="text-sm text-gray-600">Non-surgical lifting & tightening</p>
+        <p class="font-bold text-rose-600">RM 799 • 90 min</p>
+      </label>
+
+
+        <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Uterine Warming Care" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1742353927_4bde8da6b410fb025488447726a563da.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg" class="h-36 w-full object-cover rounded-md mb-2"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Uterine Warming Care</h3>
+        <p class="text-sm text-gray-600">Traditional warming therapy</p>
+        <p class="font-bold text-rose-600">RM 399 • 60 min</p>
+      </label>
+
+
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Oxygen Infused Hydration Skin Managemen" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1742354495_462e124658be724773ab104027cc97aa.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg" class="h-36 w-full object-cover rounded-md mb-2"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Oxygen Infused Hydration Skin Management</h3>
+        <p class="text-sm text-gray-600">Deep hydration with oxygen infusion</p>
+        <p class="font-bold text-rose-600">RM 499 • 75 min</p>
+      </label>
+
+
+        <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Acne Clear Injection Therapy" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1742354797_8c40402efdffdca095cfd6bb362cf4e4.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg" class="h-36 w-full object-cover rounded-md mb-2"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Acne Clear Injection Therapy</h3>
+        <p class="text-sm text-gray-600">Targeted acne injection therapy</p>
+        <p class="font-bold text-rose-600">RM 349 • 45 min</p>
+      </label>
+
+
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Anti-Sensitivity Repair & Management" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1742355055_f903e8f5ce34afcdbb42a32b53056586.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg" class="h-36 w-full object-cover rounded-md mb-2"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Anti-Sensitivity Repair & Management</h3>
+        <p class="text-sm text-gray-600">Sensitive skin repair & care</p>
+        <p class="font-bold text-rose-600">RM 449 • 60 min</p>
+      </label>
+
+
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Skin Barrier Repair" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1742355305_4a0bdfd75603cfb30285bc95bcf7fd6b.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg" class="h-36 w-full object-cover rounded-md mb-2"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Skin Barrier Repair</h3>
+        <p class="text-sm text-gray-600">Restore & strengthen skin barrier</p>
+        <p class="font-bold text-rose-600">RM 399 • 60 min</p>
+      </label>
+
+
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Nano Moisturizing Light Therapy" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1742355534_4c7bc95e23c73ee511eec164e6587bf5.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Nano Moisturizing Light Therapy</h3>
+        <p class="text-sm text-gray-600">Nano tech + light therapy</p>
+        <p class="font-bold text-rose-600">RM 549 • 70 min</p>
+      </label>
+
+
+           <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Laser Hair Removal" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1742356055_c0ec04cdf12e31f99feea9dceac4f51e.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Laser Hair Removal</h3>
+        <p class="text-sm text-gray-600">Permanent hair reduction</p>
+        <p class="font-bold text-rose-600">RM 299 • 45 min</p>
+      </label>
+
+
+      <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Wax Hair Removal" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1742356055_c0ec04cdf12e31f99feea9dceac4f51e.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Wax Hair Removal</h3>
+        <p class="text-sm text-gray-600">Professional waxing service</p>
+        <p class="font-bold text-rose-600">RM 149 • 30 min</p>
+      </label>
+
+
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Slimming Treatment" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1742376069_f49be0dec74d8029595f2db2b6f756cf.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Slimming Treatment</h3>
+        <p class="text-sm text-gray-600">Body contouring therapy</p>
+        <p class="font-bold text-rose-600">RM 699 • 90 min</p>
+      </label>
+
+
+      <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Eyebrow Embroidery" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1741673384_64ea866c03337c6d90898b1c8f83597d.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg" class="h-36 w-full object-cover rounded-md mb-2" class="h-36 w-full object-cover rounded-md mb-2"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Eyebrow Embroidery</h3>
+        <p class="text-sm text-gray-600">Semi-permanent eyebrow enhancement</p>
+        <p class="font-bold text-rose-600">RM 499 • 120 min</p>
+      </label>
+
+
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Eyeliner Tattoo" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1741673706_7c0678239b670e548a87ec783b90d6c8.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Eyeliner Tattoo</h3>
+        <p class="text-sm text-gray-600">Semi-permanent eyeliner</p>
+        <p class="font-bold text-rose-600">RM 449 • 90 min</p>
+      </label>
+
+
+          <label class="relative cursor-pointer border rounded-xl p-3 transition peer-checked:bg-rose-50 peer-checked:border-rose-500">
+        <input type="radio" name="selectedPackage" value="Lip Blushing" class="peer hidden" required>
+        <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-rose-500 text-white
+                    flex items-center justify-center opacity-0 peer-checked:opacity-100"><i class="ri-check-line"></i>
+        </div>
+        <img src="https://cdn1.npcdn.net/images/1741673984_bb5a51695a770ce1b68592d678e23d48.webp?md5id=eb17f3472e73f481d8e135c779c01858&new_width=1000&new_height=1000&size=max&type=3&w=-62170008925&off_wm=1&from=jpeg"
+             class="h-36 w-full object-cover rounded-md mb-2">
+        <h3 class="font-semibold">Lip Blushing</h3>
+        <p class="text-sm text-gray-600">Semi-permanent lip color</p>
+        <p class="font-bold text-rose-600">RM 549 • 120 min</p>
+      </label>
+
+        </div>
+      </div>
+
+      <!-- PERSONAL INFO -->
+      <div class="p-4 border rounded-lg bg-white">
+        <h2 class="text-xl font-semibold flex items-center gap-2 text-gray-800 mb-3">
+          <i class="ri-user-line rose-icon"></i> Personal Information
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" name="fullName" placeholder="Full Name *" required class="border p-2 rounded-lg">
+          <input type="email" name="email" placeholder="Email Address *" required class="border p-2 rounded-lg">
+          <input type="tel" name="phone" placeholder="Phone Number *" required class="border p-2 rounded-lg">
+          <input type="date" name="dateOfBirth" class="border p-2 rounded-lg">
+          <select name="gender" class="border p-2 rounded-lg">
+            <option value="">Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+       <!-- ADDRESS INFO -->
+  <div class="p-4 border rounded-lg bg-white">
+    <h2 class="text-xl font-semibold flex items-center gap-2 text-gray-800 mb-3">
+      <i class="ri-map-pin-line rose-icon"></i> Address Information
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <input type="text" name="streetAddress" placeholder="Street Address" class="border p-2 rounded-lg">
+      <input type="text" name="city" placeholder="City" class="border p-2 rounded-lg">
+      <input type="text" name="state" placeholder="State" class="border p-2 rounded-lg">
+      <input type="text" name="postalCode" placeholder="Postal Code" class="border p-2 rounded-lg">
+    </div>
+  </div>
+
+
+
+
+      <!-- EMERGENCY CONTACT -->
+      <div class="p-4 border rounded-lg bg-white">
+        <h2 class="text-xl font-semibold flex items-center gap-2 text-gray-800 mb-3">
+          <i class="ri-phone-line rose-icon"></i> Emergency Contact
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" name="emergencyContact" placeholder="Emergency Contact Name" class="border p-2 rounded-lg">
+          <input type="tel" name="emergencyPhone" placeholder="+60 12-345 6789" class="border p-2 rounded-lg">
+        </div>
+      </div>
+
+      <!-- CONSULTATION DETAILS -->
+      <div class="p-4 border rounded-lg bg-white">
+        <h2 class="text-xl font-semibold flex items-center gap-2 text-gray-800 mb-3">
+          <i class="ri-calendar-check-line rose-icon"></i> Consultation Details
+        </h2>
+        <input type="date" name="preferredDate" class="border p-2 rounded-lg mb-2">
+        <select name="preferredTime" class="border p-2 rounded-lg mb-2">
+          <option value="">Select Preferred Time</option>
+          <option>Morning (9AM–12PM)</option>
+          <option>Afternoon (12PM–3PM)</option>
+          <option>Evening (3PM–6PM)</option>
+        </select>
+        <select name="skinType" class="border p-2 rounded-lg">
+          <option value="">Select Skin Type</option>
+          <option>Normal</option>
+          <option>Dry</option>
+          <option>Oily</option>
+          <option>Combination</option>
+          <option>Sensitive</option>
+        </select>
+
+        <textarea name="concerns" placeholder="Main Concerns *" maxlength="500" required class="w-full p-2 border rounded-lg mb-1"></textarea>
+        <div class="text-right text-xs text-gray-500">Max 500 characters</div>
+      </div>
+
+      <!-- MEDICAL HISTORY -->
+      <div class="p-4 border rounded-lg bg-white">
+        <h2 class="text-xl font-semibold flex items-center gap-2 text-gray-800 mb-3">
+          <i class="ri-heart-pulse-line rose-icon"></i> Medical History
+        </h2>
+        <textarea name="medicalHistory" placeholder="Medical History (Max 500 characters)" maxlength="500" class="w-full p-2 border rounded-lg mb-2"></textarea>
+        <input type="text" name="allergies" placeholder="Known Allergies" class="border p-2 rounded-lg mb-2">
+        <input type="text" name="currentMedications" placeholder="Current Medications" class="border p-2 rounded-lg mb-2">
+        <input type="text" name="previousTreatments" placeholder="Previous Treatments" class="border p-2 rounded-lg">
+      </div>
+
+      <!-- LIFESTYLE -->
+      <div class="p-4 border rounded-lg bg-white">
+        <h2 class="text-xl font-semibold flex items-center gap-2 text-gray-800 mb-3">
+          <i class="ri-heart-line rose-icon"></i> Lifestyle Information
+        </h2>
+        <textarea name="lifestyle" placeholder="Lifestyle Habits (e.g., smoking, exercise, diet)" class="w-full p-2 border rounded-lg"></textarea>
+      </div>
+
+      <!-- CONSENT -->
+      <div class="p-4 border rounded-lg bg-white">
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="consent" required class="w-4 h-4 rose-icon">
+          I agree to the terms & conditions and consent to data processing *
+        </label>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="flex justify-between items-center">
+        <div class="text-sm text-gray-600">
+          * Required fields
+        </div>
+        <button type="submit" class="px-6 py-3 bg-rose-500 text-white rounded-lg hover:bg-rose-600 flex items-center gap-2">
+          <i class="ri-send-plane-fill"></i>
+          Submit Consultation Form
+        </button>
+      </div>
+   </form>
+   </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('consultationForm');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Stop default submit
+
+        const formData = new FormData(form);
+
+        fetch(form.action, { // uses action="php/consultation-submit.php"
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+    if(data.success){
+        if(data.role === 'admin'){
+            window.location.href = 'customer-records.html';
+        } else {
+            window.location.href = 'my-customer.html';
+        }
+    } else {
+        alert(data.message || 'Submission failed');
+    }
+})
+
+        .catch(err => {
+            console.error(err);
+            alert('An error occurred');
+        });
+    });
+});
+</script>
+
+
+
+</body>
+</html>

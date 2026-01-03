@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Logs | Secure System</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: url("assets/images/bg-beauty.jpg") no-repeat center/cover;
+      font-family: 'Inter', sans-serif;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start pt-10 px-4 bg-rose-100 bg-opacity-70 backdrop-blur">
+
+  <div class="bg-white bg-opacity-90 p-8 rounded-xl shadow-2xl max-w-4xl w-full fade-in">
+    <h2 class="text-2xl text-center text-rose-600 font-semibold mb-6">System Logs</h2>
+
+    <!-- Tabs -->
+    <div class="flex justify-center space-x-4 mb-6">
+      <button onclick="showLogs('personal')" class="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600">View Personal Logs</button>
+      <button onclick="showLogs('activity')" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400" id="activityBtn">View Activity Logs</button>
+    </div>
+
+    <!-- Log Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-700 border">
+        <thead class="bg-rose-200 text-rose-800">
+          <tr>
+            <th class="px-3 py-2">Date</th>
+            <th class="px-3 py-2">User</th>
+            <th class="px-3 py-2">Action</th>
+          </tr>
+        </thead>
+        <tbody id="logTable" class="bg-white bg-opacity-70"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Simulate user role
+    const userRole = "admin"; // or "staff"
+    const currentUser = "alice"; // Simulated logged-in user
+
+    // Sample log data
+    const logs = [
+      { date: "2025-06-12", user: "alice", action: "Encrypted an image" },
+      { date: "2025-06-12", user: "bob", action: "Decrypted a customer file" },
+      { date: "2025-06-13", user: "alice", action: "Logged in" },
+      { date: "2025-06-13", user: "bob", action: "Generated a report" },
+    ];
+
+    const logTable = document.getElementById("logTable");
+    const activityBtn = document.getElementById("activityBtn");
+
+    // Hide activity logs button for non-admins
+    if (userRole !== "admin") {
+      activityBtn.style.display = "none";
+    }
+
+    function showLogs(type) {
+      logTable.innerHTML = "";
+
+      const filteredLogs = (type === "activity" && userRole === "admin")
+        ? logs
+        : logs.filter(log => log.user === currentUser);
+
+      if (filteredLogs.length === 0) {
+        logTable.innerHTML = `<tr><td class="px-3 py-2 italic text-gray-500" colspan="3">No logs found.</td></tr>`;
+        return;
+      }
+
+      filteredLogs.forEach(log => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="px-3 py-2">${log.date}</td>
+          <td class="px-3 py-2">${log.user}</td>
+          <td class="px-3 py-2">${log.action}</td>
+        `;
+        logTable.appendChild(row);
+      });
+    }
+
+    // Show personal logs by default
+    showLogs('personal');
+  </script>
+</body>
+</html>

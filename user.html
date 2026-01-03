@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Management | Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen">
+
+  <!-- ✅ Top Navigation -->
+  <nav class="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-rose-600">User Management</h1>
+    <a href="admin-dashboard.html"></a>
+    <div class="flex items-center gap-4">
+      <p id="adminName" class="text-gray-700 font-medium"></p>
+      <button onclick="logout()" class="bg-rose-500 text-white px-3 py-1 rounded hover:bg-rose-600">Logout</button>
+    </div>
+  </nav>
+
+  <!-- ✅ User Table -->
+  <section class="max-w-6xl mx-auto p-6">
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden text-sm text-center">
+      <thead class="bg-rose-200 text-gray-800">
+        <tr>
+          <th class="py-2 px-4">ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="userTableBody"></tbody>
+    </table>
+  </section>
+
+  <script>
+    // 🛡️ Secure Admin Access
+    const role = localStorage.getItem("role");
+    const username = localStorage.getItem("username");
+
+    if (!username || role !== "admin") {
+      alert("Access denied. Admin only.");
+      window.location.href = "login.html";
+    }
+    document.getElementById("adminName").textContent = username || "Admin";
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+
+    // 🟢 Load users
+    function loadUsers() {
+      fetch("php/user-fetch.php")
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.getElementById("userTableBody");
+          tbody.innerHTML = "";
+
+          data.forEach(user => {
+            const tr = document.createElement("tr");
+            tr.classList.add("border-b");
+            tr.innerHTML = `
+              <td class="p-2">${user.id}</td>
+              <td>${user.username}</td>
+              <td>${user.email}</td>
+              <td>${user.phone}</td>
+              <td>${user.role}</td>
+              <td>
+                <span class="px-2 py-1 text-xs font-medium rounded ${user.status === 'approved' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}">
+                  ${user.status}
+                </span>
+              </td>
+              <td class="flex justify-center gap-2 p-2">
+                ${user.status === 'pending' ? `<button onclick="approveUser(${user.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Approve</button>` : ''}
+                <button onclick="deleteUser(${user.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        })
+        .catch(err => console.error("Failed to load users:", err));
+    }
+
+    // ✅ Approve user
+    function approveUser(id) {
+      if (!confirm("Approve this user?")) return;
+      const formData = new FormData();
+      formData.append("id", id);
+
+      fetch("php/user-approve.php", {
+        method: "POST",
+        body: formData
+      })
+        .then(res => res.text())
+        .then(data => {
+          if (data.trim() === "success") {
+            alert("User approved.");
+            loadUsers();
+          } else {
+            alert("Error: " + data);
+          }
+        });
+    }
+
+    // ✅ Delete user
+    function deleteUser(id) {
+      if (!confirm("Are you sure to delete this user?")) return;
+      const formData = new FormData();
+      formData.append("id", id);
+
+      fetch("php/user-delete.php", {
+        method: "POST",
+        body: formData
+      })
+        .then(res => res.text())
+        .then(data => {
+          if (data.trim() === "success") {
+            alert("User deleted.");
+            loadUsers();
+          } else {
+            alert("Delete failed: " + data);
+          }
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", loadUsers);
+  </script>
+</body>
+</html>

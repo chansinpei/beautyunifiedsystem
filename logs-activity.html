@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Activity Logs</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800">
+
+<!-- Top Navigation Bar -->
+<nav class="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+  <h1 class="text-xl font-bold text-rose-600">All Activity Logs</h1>
+  <div>
+    <button onclick="logout()" class="bg-rose-500 text-white px-3 py-1 rounded hover:bg-rose-600">Logout</button>
+  </div>
+</nav>
+
+<!-- Logs Table -->
+<section class="p-6 max-w-6xl mx-auto">
+  <div class="bg-white shadow-md rounded-lg p-4">
+    <h2 class="text-lg font-semibold text-rose-600 mb-4">Activity Log Table</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full border text-sm text-center">
+        <thead class="bg-rose-200">
+          <tr>
+            <th class="border p-2">ID</th>
+            <th class="border p-2">Type</th>
+            <th class="border p-2">User</th>
+            <th class="border p-2">Action</th>
+            <th class="border p-2">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="activityTable">
+          <!-- Logs will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script>
+function logout() {
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+
+// Fetch all activity logs
+async function loadLogs() {
+  try {
+    const res = await fetch('php/logs-fetch.php'); // backend PHP to get logs
+    if (!res.ok) throw new Error('Network error');
+    const data = await res.json();
+
+    const table = document.getElementById('activityTable');
+    table.innerHTML = '';
+
+    if (!data.length) {
+      table.innerHTML = `<tr><td colspan="5" class="p-4 text-gray-500">No logs found.</td></tr>`;
+      return;
+    }
+
+    data.forEach(log => {
+      const row = table.insertRow();
+      row.insertCell(0).textContent = log.id;
+      row.insertCell(1).textContent = log.type;
+      row.insertCell(2).textContent = log.user;
+      row.insertCell(3).textContent = log.action;
+      row.insertCell(4).textContent = log.timestamp;
+    });
+
+  } catch (err) {
+    alert('Failed to load logs: ' + err);
+    console.error(err);
+  }
+}
+
+// Initialize
+loadLogs();
+</script>
+
+</body>
+</html>

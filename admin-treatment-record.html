@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treatment Records</title>
+  <!-- THEME -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: url("assets/images/bg-beauty.jpg") no-repeat center / cover;
+    }
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Rose pink theme overrides */
+    .bg-rose-light { background-color: rgba(255, 228, 236, 0.6); }
+    .bg-rose { background-color: #ff85a2; }
+    .text-rose { color: #ff4d6d; }
+    .border-rose { border-color: #ff85a2; }
+    .hover-bg-rose { background-color: #ff4d6d; }
+    .badge-rose { background-color: rgba(255,77,109,0.1); color: #ff4d6d; }
+    .btn-rose { background-color: #ff85a2; color: white; }
+    .btn-rose:hover { background-color: #ff4d6d; }
+    .icon-rose { color: #ff4d6d; }
+  </style>
+</head>
+<body class="font-sans">
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-rose brand-title mb-2">Treatment Records</h1>
+      <p class="text-rose/70">View and manage all treatment records across the salon</p>
+    </div>
+   <button id="addRecordBtn" class="flex items-center space-x-2 px-6 py-3 btn-rose rounded-lg hover:bg-rose-600 transition-colors cursor-pointer">
+  <i class="ri-add-circle-line text-lg text-white"></i>
+  <span class="font-medium text-white">Add Record</span>
+</button>
+
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white/80 rounded-lg border border-rose-light p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-rose/70 mb-1">Total Records</p>
+          <p id="statTotal" class="text-3xl font-bold text-rose">0</p>
+        </div>
+        <div class="w-12 h-12 bg-rose/20 rounded-lg flex items-center justify-center">
+          <i class="ri-file-list-3-line text-2xl icon-rose"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white/80 rounded-lg border border-rose-light p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-rose/70 mb-1">Completed</p>
+          <p id="statCompleted" class="text-3xl font-bold text-rose">0</p>
+        </div>
+        <div class="w-12 h-12 bg-rose/20 rounded-lg flex items-center justify-center">
+          <i class="ri-checkbox-circle-line text-2xl icon-rose"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white/80 rounded-lg border border-rose-light p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-rose/70 mb-1">This Month</p>
+          <p id="statThisMonth" class="text-3xl font-bold text-rose">0</p>
+        </div>
+        <div class="w-12 h-12 bg-rose/20 rounded-lg flex items-center justify-center">
+          <i class="ri-calendar-check-line text-2xl icon-rose"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white/80 rounded-lg border border-rose-light p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-rose/70 mb-1">Total Revenue</p>
+          <p id="statRevenue" class="text-3xl font-bold text-rose">RM 0</p>
+        </div>
+        <div class="w-12 h-12 bg-rose/20 rounded-lg flex items-center justify-center">
+          <i class="ri-money-dollar-circle-line text-2xl icon-rose"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white/80 rounded-lg border border-rose-light p-6 mb-6 flex flex-col sm:flex-row gap-4">
+    <input type="text" id="searchInput" placeholder="Search by customer, treatment, or staff..." class="flex-1 pl-10 pr-4 py-2 text-sm border border-rose-light rounded-lg focus:outline-none focus:ring-2 focus:ring-rose focus:border-transparent">
+    <select id="filterCategory" class="px-4 py-2 text-sm border border-rose-light rounded-lg focus:outline-none focus:ring-2 focus:ring-rose focus:border-transparent cursor-pointer">
+      <option value="all">All Categories</option>
+      <option value="Facial">Facial</option>
+      <option value="Eyebrow">Eyebrow</option>
+      <option value="Hair Removal">Hair Removal</option>
+      <option value="Body">Body</option>
+      <option value="Cosmetic Tattoo">Cosmetic Tattoo</option>
+    </select>
+    <select id="filterStaff" class="px-4 py-2 text-sm border border-rose-light rounded-lg focus:outline-none focus:ring-2 focus:ring-rose focus:border-transparent cursor-pointer">
+      <option value="all">All Staff</option>
+      <option value="Sarah Johnson">Sarah Johnson</option>
+      <option value="Michelle Wong">Michelle Wong</option>
+      <option value="Amanda Tan">Amanda Tan</option>
+    </select>
+  </div>
+
+  <!-- Treatment Records Grid -->
+  <div id="recordsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+</div>
+
+<!-- Detail Modal -->
+<div id="detailModal" class="hidden fixed inset-0 bg-rose-light/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-rose-light">
+      <h2 class="text-xl font-bold text-rose brand-title">Treatment Record Details</h2>
+      <button id="closeDetailModal" class="w-8 h-8 flex items-center justify-center text-rose hover:bg-rose-light rounded-lg cursor-pointer">
+        <i class="ri-close-line text-xl"></i>
+      </button>
+    </div>
+    <div class="p-6" id="detailContent">
+      <!-- Dynamic content via JS -->
+    </div>
+  </div>
+</div>
+
+<!-- Add Record Modal -->
+<div id="addModal" class="hidden fixed inset-0 bg-rose-light/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-xl max-w-xl w-full max-h-[90vh] flex flex-col">
+    
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-rose-light">
+      <h2 class="text-xl font-bold text-rose brand-title">Add Treatment Record</h2>
+      <button id="closeAddModal" class="w-8 h-8 flex items-center justify-center text-rose hover:bg-rose-light rounded-lg">
+        <i class="ri-close-line text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="p-6 space-y-4 overflow-y-auto flex-1">
+      <form id="addRecordForm" enctype="multipart/form-data" class="space-y-4">
+        <input required placeholder="Customer Name" id="customer" class="w-full border border-rose-light rounded-lg px-4 py-2">
+        
+        <select id="treatment" required class="w-full border border-rose-light rounded-lg px-4 py-2">
+          <option value="">Select Treatment</option>
+          <option>Non-invasive Eyebrow Cleaning</option>
+          <option>Intense Pulsed Light (IPL) Therapy</option>
+          <option>HIFU Facelift Therapy</option>
+          <option>Uterine Warming Care</option>
+          <option>Oxygen Infused Hydration Skin Management</option>
+          <option>Acne Clear Injection Therapy</option>
+          <option>Anti-Sensitivity Repair & Management</option>
+          <option>Skin Barrier Repair</option>
+          <option>Nano Moisturizing Light Therapy</option>
+          <option>Laser Hair Removal</option>
+          <option>Wax Hair Removal</option>
+          <option>Slimming Treatment</option>
+          <option>Eyebrow Embroidery</option>
+          <option>Eyeliner Tattoo</option>
+          <option>Lip Blushing</option>
+        </select>
+
+        <select id="category" class="w-full border border-rose-light rounded-lg px-4 py-2">
+          <option>Facial</option>
+          <option>Eyebrow</option>
+          <option>Hair Removal</option>
+          <option>Body</option>
+          <option>Cosmetic Tattoo</option>
+        </select>
+
+        <input required placeholder="Staff Name" id="staff" class="w-full border border-rose-light rounded-lg px-4 py-2">
+        <input type="date" id="date" class="w-full border border-rose-light rounded-lg px-4 py-2">
+        <input required placeholder="Price (RM)" id="price" class="w-full border border-rose-light rounded-lg px-4 py-2">
+        
+        <label class="text-sm text-black font-medium">Before Photo</label>
+        <input type="file" id="beforePhoto" accept="image/*" class="w-full border border-rose-light rounded-lg px-4 py-2">
+
+        <label class="text-sm text-black font-medium">After Photo</label>
+        <input type="file" id="afterPhoto" accept="image/*" class="w-full border border-rose-light rounded-lg px-4 py-2">
+
+        <textarea id="notes" placeholder="Treatment Notes" class="w-full border border-rose-light rounded-lg px-4 py-2"></textarea>
+        <input id="products" placeholder="Products Used (comma separated)" class="w-full border border-rose-light rounded-lg px-4 py-2">
+        <input type="date" id="nextAppointment" class="w-full border border-rose-light rounded-lg px-4 py-2">
+      
+      <!-- Sticky Footer Buttons -->
+    <div class="flex justify-end gap-3 p-4 border-t border-rose-light">
+      <button type="button" id="cancelAdd" class="px-5 py-2 border border-rose-light rounded-lg text-rose hover:bg-rose-light">
+        Back
+      </button>
+      <button type="submit" form="addRecordForm" class="px-6 py-3 btn-rose rounded-lg hover:bg-rose-600 text-white flex items-center space-x-2">
+        <i class="ri-add-circle-line text-lg"></i>
+        <span class="font-medium">Save Record</span>
+      </button>
+    </div>
+      
+      </form>
+    </div>
+
+    
+  </div>
+</div>
+
+
+
+  </div>
+</div>
+
+
+
+<script>
+  let treatmentRecords = [];
+
+/* ----------------- DOM ELEMENTS ----------------- */
+const customer = document.getElementById('customer');
+const treatment = document.getElementById('treatment');
+const category = document.getElementById('category');
+const staff = document.getElementById('staff');
+const date = document.getElementById('date');
+const price = document.getElementById('price');
+const beforePhoto = document.getElementById('beforePhoto');
+const afterPhoto = document.getElementById('afterPhoto');
+const notes = document.getElementById('notes');
+const products = document.getElementById('products');
+const nextAppointment = document.getElementById('nextAppointment');
+
+const recordsGrid = document.getElementById('recordsGrid');
+const searchInput = document.getElementById('searchInput');
+const filterCategory = document.getElementById('filterCategory');
+const filterStaff = document.getElementById('filterStaff');
+const detailModal = document.getElementById('detailModal');
+const detailContent = document.getElementById('detailContent');
+const closeDetailModal = document.getElementById('closeDetailModal');
+
+const addModal = document.getElementById('addModal');
+const openAddBtn = document.getElementById('addRecordBtn'); 
+const closeAddModal = document.getElementById('closeAddModal');
+const cancelAdd = document.getElementById('cancelAdd');
+const addRecordForm = document.getElementById('addRecordForm');
+
+
+/* ----------------- FETCH RECORDS ----------------- */
+async function loadTreatmentRecords() {
+    try {
+        const res = await fetch('php/treatment-fetch.php');
+        const records = await res.json();
+
+        if (records.status === 'success') {
+    treatmentRecords = records.records || [];
+}
+
+renderRecords();
+
+    } catch (err) {
+        console.error('Failed to fetch records:', err);
+    }
+}
+
+
+
+// Call on page load
+loadTreatmentRecords();
+
+/* ----------------- RENDER RECORDS ----------------- */
+function renderRecords(records = treatmentRecords) {
+    if (!Array.isArray(records)) records = [];
+
+    const searchTerm = searchInput.value.toLowerCase();
+
+    const categoryFilter = filterCategory.value;
+    const staffFilter = filterStaff.value;
+
+    const filtered = records.filter(r =>
+        (r.customer.toLowerCase().includes(searchTerm) ||
+         r.treatment.toLowerCase().includes(searchTerm) ||
+         r.staff.toLowerCase().includes(searchTerm)) &&
+        (categoryFilter === 'all' || r.category === categoryFilter) &&
+        (staffFilter === 'all' || r.staff === staffFilter)
+    );
+
+    recordsGrid.innerHTML = '';
+    filtered.forEach(record => {
+        const div = document.createElement('div');
+        div.className = 'bg-white/80 rounded-lg border border-rose-light overflow-hidden hover:shadow-lg transition-shadow cursor-pointer';
+        div.innerHTML = `
+            <div class="grid grid-cols-2 gap-2 p-2">
+                <div class="relative w-full h-48">
+                    <img src="${record.beforePhoto}" class="w-full h-full object-cover rounded-lg"/>
+                    <span class="absolute top-2 left-2 px-2 py-1 bg-rose/70 text-white text-xs font-medium rounded">Before</span>
+                </div>
+                <div class="relative w-full h-48">
+                    <img src="${record.afterPhoto}" class="w-full h-full object-cover rounded-lg"/>
+                    <span class="absolute top-2 left-2 px-2 py-1 bg-rose/90 text-white text-xs font-medium rounded">After</span>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <h3 class="font-semibold text-rose mb-1">${record.treatment}</h3>
+                        <p class="text-black text-sm">${record.customer}</p>
+                    </div>
+                    <span class="px-3 py-1 badge-rose text-sm font-medium rounded-full">${record.category}</span>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-rose-light">
+                    <span class="text-rose font-bold text-lg">${record.price}</span>
+                    <span class="px-3 py-1 badge-rose text-xs font-medium rounded-full">${record.status}</span>
+                </div>
+            </div>
+        `;
+        div.addEventListener('click', () => showDetails(record));
+        recordsGrid.appendChild(div);
+    });
+
+    // Update stats
+    document.getElementById('statTotal').innerText = records.length;
+    document.getElementById('statCompleted').innerText = records.filter(r => r.status.toLowerCase() === 'completed').length;
+    const currentMonth = new Date().toISOString().slice(0,7); // YYYY-MM
+    document.getElementById('statThisMonth').innerText = records.filter(r => r.date.startsWith(currentMonth)).length;
+    document.getElementById('statRevenue').innerText = 'RM ' + records.reduce((sum,r)=>sum + parseInt(r.price.replace('RM ','')||0),0);
+}
+
+/* ----------------- SHOW DETAILS MODAL ----------------- */
+function showDetails(record) {
+    detailContent.innerHTML = `
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="relative w-full h-80">
+          <img src="${record.beforePhoto}" class="w-full h-full object-cover rounded-lg"/>
+          <span class="absolute top-3 left-3 px-3 py-1.5 bg-rose/70 text-white text-sm font-medium rounded">Before Treatment</span>
+        </div>
+        <div class="relative w-full h-80">
+          <img src="${record.afterPhoto}" class="w-full h-full object-cover rounded-lg"/>
+          <span class="absolute top-3 left-3 px-3 py-1.5 bg-rose/90 text-white text-sm font-medium rounded">After Treatment</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div><label class="block text-sm font-medium text-black mb-1">Treatment</label><p class="text-black font-semibold">${record.treatment}</p></div>
+        <div><label class="block text-sm font-medium text-black mb-1">Category</label><span class="inline-flex px-3 py-1 badge-rose text-sm font-medium rounded-full">${record.category}</span></div>
+        <div><label class="block text-sm font-medium text-black mb-1">Customer</label><p class="text-black">${record.customer}</p></div>
+        <div><label class="block text-sm font-medium text-black mb-1">Staff Member</label><p class="text-black">${record.staff}</p></div>
+        <div><label class="block text-sm font-medium text-black mb-1">Date</label><p class="text-black">${record.date}</p></div>
+        <div><label class="block text-sm font-medium text-black mb-1">Duration</label><p class="text-black">${record.duration}</p></div>
+        <div><label class="block text-sm font-medium text-black mb-1">Price</label><p class="text-rose font-bold text-lg">${record.price}</p></div>
+        <div><label class="block text-sm font-medium text-black mb-1">Status</label><span class="inline-flex px-3 py-1 badge-rose text-xs font-medium rounded-full">${record.status}</span></div>
+      </div>
+      <div class="mb-6"><label class="block text-sm font-medium text-black mb-2">Products Used</label><div class="flex flex-wrap gap-2">${record.products.map(p=>`<span class="px-3 py-1 badge-rose text-sm rounded-full">${p}</span>`).join('')}</div></div>
+      <div class="mb-6"><label class="block text-sm font-medium text-black mb-2">Treatment Notes</label><p class="text-black bg-rose-light p-4 rounded-lg">${record.notes}</p></div>
+      <div><label class="block text-sm font-medium text-black mb-1">Next Appointment</label><p class="text-black">${record.nextAppointment}</p></div>
+      <div class="flex items-center justify-end space-x-3 mt-6 pt-6 border-t border-rose-light">
+        <button id="closeDetailBtn" class="px-6 py-2 border border-rose-light rounded-lg text-rose hover:bg-rose-light cursor-pointer">Close</button>
+      </div>
+    `;
+    detailModal.classList.remove('hidden');
+    document.getElementById('closeDetailBtn').addEventListener('click', () => detailModal.classList.add('hidden'));
+}
+
+/* ----------------- EVENT LISTENERS ----------------- */
+searchInput.addEventListener('input', renderRecords);
+filterCategory.addEventListener('change', renderRecords);
+filterStaff.addEventListener('change', renderRecords);
+closeDetailModal.addEventListener('click', () => detailModal.classList.add('hidden'));
+
+openAddBtn.addEventListener('click', () => addModal.classList.remove('hidden'));
+closeAddModal.addEventListener('click', () => addModal.classList.add('hidden'));
+cancelAdd.addEventListener('click', () => addModal.classList.add('hidden'));
+
+/* ----------------- ADD RECORD FORM ----------------- */
+addRecordForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('customer', customer.value);
+    formData.append('treatment', treatment.value);
+    formData.append('category', category.value);
+    formData.append('staff', staff.value);
+    formData.append('date', date.value);
+    formData.append('price', price.value);
+    formData.append('notes', notes.value);
+    formData.append('products', products.value);
+    formData.append('nextAppointment', nextAppointment.value);
+
+    if (beforePhoto.files[0]) formData.append('beforePhoto', beforePhoto.files[0]);
+    if (afterPhoto.files[0]) formData.append('afterPhoto', afterPhoto.files[0]);
+
+    fetch('php/treatment-save.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            addModal.classList.add('hidden');
+            addRecordForm.reset();
+
+            // Show toast
+              loadTreatmentRecords();
+            const toast = document.getElementById('successToast');
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100');
+            setTimeout(() => toast.classList.add('opacity-0'), 2500);
+        } else {
+            alert('Error saving record: ' + data.error);
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Error saving record!');
+    });
+});
+</script>
+
+
+<!-- Success Message Toast -->
+<div id="successToast" class="fixed bottom-6 right-6 bg-rose text-white px-6 py-3 rounded-lg shadow-lg opacity-0 transition-opacity duration-300 z-50">
+  Record saved successfully!
+</div>
+</body>
+</html>

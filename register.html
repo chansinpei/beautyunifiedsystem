@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | Secure System</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: url("assets/images/bg-beauty.jpg") no-repeat center / cover;
+    }
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-rose-100/70 backdrop-blur-sm px-4">
+
+<div class="w-full max-w-md">
+
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+      <i class="ri-user-add-line text-3xl text-white"></i>
+    </div>
+    <h1 class="brand-title text-3xl text-gray-900 mb-1">Create Account</h1>
+    <p class="text-gray-600 text-sm">Join our staff portal today</p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-rose-100 overflow-hidden p-6">
+
+    <form id="registerForm" class="space-y-4">
+
+      <input type="hidden" id="role" value="staff">
+
+      <!-- Full Name -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-1 block">Full Name</label>
+        <div class="relative">
+          <i class="ri-user-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input
+            type="text"
+            id="fullName"
+            class="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-rose-400"
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-1 block">Email Address</label>
+        <div class="relative">
+          <i class="ri-mail-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input
+            type="email"
+            id="email"
+            class="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-rose-400"
+            placeholder="user@email.com"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-1 block">Phone Number</label>
+        <div class="relative">
+          <i class="ri-phone-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input
+            type="text"
+            id="phone"
+            class="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-rose-400"
+            placeholder="e.g. 0123456789"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-1 block">Password</label>
+        <div class="relative">
+          <i class="ri-lock-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input
+            type="password"
+            id="password"
+            class="w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-rose-400"
+            placeholder="Create a password"
+            required
+          />
+          <span onclick="togglePassword()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500">👁️</span>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-1 block">Confirm Password</label>
+        <div class="relative">
+          <i class="ri-lock-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input
+            type="password"
+            id="confirmPassword"
+            class="w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-rose-400"
+            placeholder="Confirm your password"
+            required
+          />
+          <span onclick="toggleConfirmPassword()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500">👁️</span>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <div class="flex items-start gap-2 mt-2 text-sm text-gray-600">
+        <input type="checkbox" id="terms" class="mt-1 w-4 h-4 accent-rose-500 rounded border-gray-300 focus:ring-rose-400" required>
+        <label for="terms">
+          I agree to the 
+          <button type="button" class="text-rose-600 hover:text-rose-700 font-medium">Terms of Service</button> 
+          and 
+          <button type="button" class="text-rose-600 hover:text-rose-700 font-medium">Privacy Policy</button>
+        </label>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit"
+        class="w-full py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white font-medium rounded-lg shadow-lg hover:from-rose-600 hover:to-pink-600 transition">
+        <i class="ri-user-add-line mr-1"></i> Create Account
+      </button>
+
+      <!-- Status Message -->
+      <p id="registerStatus" class="text-center text-rose-600 mt-3 hidden"></p>
+
+      <p class="text-sm text-center text-gray-600 mt-2">
+        Already have an account?
+        <a href="login.html" class="text-rose-600 hover:underline font-medium">Sign In</a>
+      </p>
+
+    </form>
+  </div>
+</div>
+
+<!-- JS -->
+<script>
+function togglePassword() {
+  const pw = document.getElementById("password");
+  pw.type = pw.type === "password" ? "text" : "password";
+}
+
+function toggleConfirmPassword() {
+  const pw = document.getElementById("confirmPassword");
+  pw.type = pw.type === "password" ? "text" : "password";
+}
+
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const password = document.getElementById("password").value;
+  const confirm = document.getElementById("confirmPassword").value;
+
+  const status = document.getElementById("registerStatus");
+  status.textContent = "";
+  status.classList.add("hidden");
+
+  if(password !== confirm){
+    status.textContent = "Passwords do not match!";
+    status.classList.remove("hidden");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("username", document.getElementById("fullName").value);
+  formData.append("email", document.getElementById("email").value);
+  formData.append("phone", document.getElementById("phone").value);
+  formData.append("password", password);
+  formData.append("role", document.getElementById("role").value);
+
+  fetch("php/register.php", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.text())
+  .then(data => {
+    data = data.trim();
+
+    if(data === "pending"){
+      status.textContent = "Registration submitted! Your account is pending admin approval.";
+      status.classList.remove("hidden");
+    } else if(data.startsWith("error:")) {
+      status.textContent = "Registration failed: " + data.replace("error:", "").trim();
+      status.classList.remove("hidden");
+    } else {
+      status.textContent = "Registration failed: Unknown error. Please try again.";
+      status.classList.remove("hidden");
+    }
+  })
+  .catch(() => {
+    status.textContent = "System error. Please try again.";
+    status.classList.remove("hidden");
+  });
+});
+</script>
+
+</body>
+</html>
+
+

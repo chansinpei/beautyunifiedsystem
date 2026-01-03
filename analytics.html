@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Analytics & Reports - SecureData</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f7f9; margin:0; padding:0;}
+.container { padding: 20px; max-width: 1200px; margin: auto; }
+.card { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
+h2 { margin-top:0; margin-bottom:10px; color:#b91c1c; } /* rose-700 */
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px; text-align:left; }
+th { background:#f43f5e; color:white; } /* rose-500 */
+tr:nth-child(even) { background:#fef2f2; } /* rose-50 */
+tr:nth-child(odd) { background:#fff; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Customer Age Distribution</h2>
+<div class="card"><canvas id="ageChart"></canvas></div>
+
+<h2>Popular Treatments</h2>
+<div class="card"><canvas id="treatmentChart"></canvas></div>
+
+<h2>Revenue Overview (Monthly)</h2>
+<div class="card"><canvas id="revenueChart"></canvas></div>
+
+<h2>System Activity Log</h2>
+<div class="card overflow-x-auto">
+<table id="activityTable">
+<tr>
+<th>Type</th>
+<th>User</th>
+<th>Action</th>
+<th>Timestamp</th>
+</tr>
+</table>
+</div>
+</div>
+
+<script>
+// Fetch JSON safely with correct path
+async function fetchAnalyticsData() {
+    try {
+        const res = await fetch('php/analytics-data.php'); // <-- correct path
+        if (!res.ok) throw new Error('Network response was not ok');
+
+        const data = await res.json();
+
+        if (data.error) {
+            alert('Error: ' + data.error);
+            return;
+        }
+
+        renderCharts(data);
+        populateActivityTable(data.activity_log);
+
+    } catch (err) {
+        console.error('Failed to fetch analytics data:', err);
+        alert('Failed to load analytics data. Please check server or database.');
+    }
+}
+
+// Render Charts with Admin Dashboard theme colors
+function renderCharts(data) {
+    // Age Distribution (Indigo)
+    new Chart(document.getElementById('ageChart'), {
+        type: 'bar',
+        data: {
+            labels: data.age_labels,
+            datasets: [{
+                label: 'Number of Customers',
+                data: data.age_data,
+                backgroundColor: '#4f46e5' // Indigo-600
+            }]
+        },
+        options: { responsive: true, plugins: { legend:{ display:false } } }
+    });
+
+    // Popular Treatments (Rose)
+    new Chart(document.getElementById('treatmentChart'), {
+        type: 'bar',
+        data: {
+            labels: data.treatment_labels,
+            datasets: [{
+                label: 'Bookings',
+                data: data.treatment_counts,
+                backgroundColor: '#f43f5e' // Rose-500
+            }]
+        },
+        options: { responsive: true, plugins: { legend:{ display:false } } }
+    });
+
+    // Revenue Overview (Green line)
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: {
+            labels: data.monthly_labels,
+            datasets: [{
+                label: 'Revenue (RM)',
+                data: data.monthly_revenue,
+                borderColor: '#16a34a',       // green-600
+                backgroundColor: 'rgba(22,163,74,0.2)', // green-200 fill
+                fill: true,
+                tension: 0.3,
+                pointBackgroundColor: '#b91c1c' // rose-700 points
+            }]
+        },
+        options: { responsive: true }
+    });
+}
+
+// Populate Activity Log Table
+function populateActivityTable(logs) {
+    const table = document.getElementById('activityTable');
+    table.innerHTML = `<tr>
+        <th>Type</th><th>User</th><th>Action</th><th>Timestamp</th>
+    </tr>`; // reset table
+
+    logs.forEach((log, i) => {
+        const row = table.insertRow();
+        row.insertCell(0).textContent = log.type;
+        row.insertCell(1).textContent = log.user;
+        row.insertCell(2).textContent = log.action;
+        row.insertCell(3).textContent = log.timestamp;
+        row.style.backgroundColor = i % 2 === 0 ? '#fef2f2' : '#fff'; // alternating row colors
+    });
+}
+
+// Initialize
+fetchAnalyticsData();
+</script>
+</body>
+</html>
