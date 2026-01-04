@@ -3,7 +3,7 @@ echo "PHP Version: " . phpversion() . "<br>";
 echo "Current Dir: " . __DIR__ . "<br>";
 
 // Check if db.php exists
-if (file_exists('php/db.php')) {
+if (file_exists("php/db.php")) {
     echo "db.php: ✅ EXISTS<br>";
     
     include 'php/db.php';
@@ -14,7 +14,7 @@ if (file_exists('php/db.php')) {
     
     if ($result->num_rows == 0) {
         echo "🚨 DATABASE IS EMPTY!<br>";
-        echo "Create `import-now.php` to import your data!";
+        echo "Create 'import-now.php' to import your data!";
     }
 } else {
     echo "db.php: ❌ NOT FOUND<br>";
